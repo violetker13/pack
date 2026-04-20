@@ -1,0 +1,528 @@
+code:
+  blocks:
+    exec_block_1:
+      category: EVENT_PLAYER
+      type: PLAYER_JOIN
+      actions:
+        action_block_1:
+          category: PLAYER_ACTION
+          type: PLAYER_SEND_MESSAGE
+          arguments:
+            messages:
+              type: LIST
+              value:
+                '1':
+                  type: TEXT
+                  value: "§eДобро пожаловать в Stick Fight! Ты в очереди."
+              type:
+                type: TEXT
+                value: new-line
+        action_block_2:
+          category: VARIABLE_ACTION
+          type: VAR_SUM_ASSIGN_NUMBER
+          arguments:
+            variable:
+              type: VARIABLE
+              value:
+                name: lobby_players
+                type: GLOBAL
+            number:
+              type: NUMBER
+              value: 1.0
+        action_block_3:
+          category: SELECTION_ACTION
+          type: SELECTION_SET
+          target: ALL_PLAYERS
+          arguments: {}
+        action_block_4:
+          category: PLAYER_ACTION
+          type: PLAYER_SET_GAMEMODE
+          target: SELECTED
+          arguments:
+            game-mode:
+              type: TEXT
+              value: adventure
+        action_block_5:
+          category: CONTROL_ACTION
+          type: CONTROL_LAUNCH_CYCLES
+          arguments: {}
+    exec_block_2:
+      category: CYCLE
+      type: CYCLE
+      name: queuecheck
+      time: 20
+      actions:
+        condition_block_1:
+          category: PLAYER_CONDITION
+          type: IF_VARIABLE_MODULO
+          opposed: false
+          arguments:
+            variable:
+              type: VARIABLE
+              value:
+                name: lobby_players
+                type: GLOBAL
+            number:
+              type: NUMBER
+              value: 2.0
+            remainder:
+              type: NUMBER
+              value: 0.0
+          actions:
+            action_block_1:
+              category: VARIABLE_ACTION
+              type: VAR_SET_NUMBER
+              arguments:
+                variable:
+                  type: VARIABLE
+                  value:
+                    name: countdown
+                    type: GLOBAL
+                number:
+                  type: NUMBER
+                  value: 15.0
+            action_block_2:
+              category: CONTROL_ACTION
+              type: CONTROL_LAUNCH_CYCLES
+              arguments: {}
+            action_block_3:
+              category: VARIABLE_ACTION
+              type: VAR_SET_NUMBER
+              arguments:
+                variable:
+                  type: VARIABLE
+                  value:
+                    name: round_number
+                    type: GLOBAL
+                number:
+                  type: NUMBER
+                  value: 1.0
+            action_block_4:
+              category: VARIABLE_ACTION
+              type: VAR_SET_NUMBER
+              arguments:
+                variable:
+                  type: VARIABLE
+                  value:
+                    name: team1_score
+                    type: GLOBAL
+                number:
+                  type: NUMBER
+                  value: 0.0
+            action_block_5:
+              category: VARIABLE_ACTION
+              type: VAR_SET_NUMBER
+              arguments:
+                variable:
+                  type: VARIABLE
+                  value:
+                    name: team2_score
+                    type: GLOBAL
+                number:
+                  type: NUMBER
+                  value: 0.0
+    exec_block_3:
+      category: CYCLE
+      type: CYCLE
+      name: countdown
+      time: 20
+      actions:
+        condition_block_1:
+          category: PLAYER_CONDITION
+          type: IF_VARIABLE_GREATER_THAN
+          opposed: false
+          arguments:
+            variable:
+              type: VARIABLE
+              value:
+                name: countdown
+                type: GLOBAL
+            number:
+              type: NUMBER
+              value: 0.0
+          actions:
+            action_block_1:
+              category: VARIABLE_ACTION
+              type: VAR_SUBTRACT_NUMBER
+              arguments:
+                variable:
+                  type: VARIABLE
+                  value:
+                    name: countdown
+                    type: GLOBAL
+                number:
+                  type: NUMBER
+                  value: 1.0
+            action_block_2:
+              category: SELECTION_ACTION
+              type: SELECTION_SET
+              target: ALL_PLAYERS
+              arguments: {}
+            action_block_3:
+              category: PLAYER_ACTION
+              type: PLAYER_SEND_MESSAGE
+              target: SELECTED
+              arguments:
+                messages:
+                  type: LIST
+                  value:
+                    '1':
+                      type: TEXT
+                      value: "§cДо начала раунда: §f"
+                    '2':
+                      type: VARIABLE
+                      value:
+                        name: countdown
+                        type: GLOBAL
+                  type:
+                    type: TEXT
+                    value: join
+            action_block_4:
+              category: PLAYER_ACTION
+              type: PLAYER_PLAY_SOUND
+              target: SELECTED
+              arguments:
+                sound:
+                  type: TEXT
+                  value: block.note_block.pling
+                volume:
+                  type: NUMBER
+                  value: 50.0
+                pitch:
+                  type: NUMBER
+                  value: 2.0
+          else:
+            action_block_5:
+              category: CONTROL_ACTION
+              type: CONTROL_STOP_CYCLE
+              arguments: {}
+            action_block_6:
+              category: LAUNCH_FUNCTION_ACTION
+              type: LAUNCH_FUNCTION
+              name: start_round
+              target: DEFAULT
+    exec_block_4:
+      category: FUNCTION
+      type: FUNCTION
+      name: start_round
+      actions:
+        action_block_1:
+          category: SELECTION_ACTION
+          type: SELECTION_SET
+          target: ALL_PLAYERS
+          arguments: {}
+        action_block_2:
+          category: PLAYER_ACTION
+          type: PLAYER_TELEPORT
+          target: SELECTED
+          arguments:
+            location:
+              type: LOCATION
+              value:
+                x: 0
+                y: 64
+                z: 0
+                yaw: 0
+                pitch: 0
+        action_block_3:
+          category: PLAYER_ACTION
+          type: PLAYER_GIVE_ITEM
+          target: SELECTED
+          arguments:
+            items:
+              type: LIST
+              value:
+                '1':
+                  type: ITEM
+                  value:
+                    v: 3953
+                    type: STICK
+                    meta:
+                      ==: ItemMeta
+                      meta-type: UNSPECIFIC
+                      enchants:
+                        minecraft:knockback: 2
+        action_block_4:
+          category: PLAYER_ACTION
+          type: PLAYER_GIVE_ITEM
+          target: SELECTED
+          arguments:
+            items:
+              type: LIST
+              value:
+                '1':
+                  type: ITEM
+                  value:
+                    v: 3953
+                    type: LEATHER_HELMET
+                    meta:
+                      ==: ItemMeta
+                      meta-type: LEATHER_ARMOR
+                      color:
+                        red: 255
+                        green: 0
+                        blue: 0
+                '2':
+                  type: ITEM
+                  value:
+                    v: 3953
+                    type: LEATHER_CHESTPLATE
+                    meta:
+                      ==: ItemMeta
+                      meta-type: LEATHER_ARMOR
+                      color:
+                        red: 255
+                        green: 0
+                        blue: 0
+                '3':
+                  type: ITEM
+                  value:
+                    v: 3953
+                    type: LEATHER_LEGGINGS
+                    meta:
+                      ==: ItemMeta
+                      meta-type: LEATHER_ARMOR
+                      color:
+                        red: 255
+                        green: 0
+                        blue: 0
+                '4':
+                  type: ITEM
+                  value:
+                    v: 3953
+                    type: LEATHER_BOOTS
+                    meta:
+                      ==: ItemMeta
+                      meta-type: LEATHER_ARMOR
+                      color:
+                        red: 255
+                        green: 0
+                        blue: 0
+        action_block_5:
+          category: PLAYER_ACTION
+          type: PLAYER_GIVE_ITEM
+          target: SELECTED
+          arguments:
+            items:
+              type: LIST
+              value:
+                '1':
+                  type: ITEM
+                  value:
+                    v: 3953
+                    type: OAK_PLANKS
+                    amount: 64
+        action_block_6:
+          category: CONTROL_ACTION
+          type: CONTROL_LAUNCH_CYCLES
+          arguments: {}
+    exec_block_5:
+      category: CYCLE
+      type: CYCLE
+      name: roundtimer
+      time: 1200
+      actions:
+        action_block_1:
+          category: VARIABLE_ACTION
+          type: VAR_SUM_ASSIGN_NUMBER
+          arguments:
+            variable:
+              type: VARIABLE
+              value:
+                name: round_time
+                type: GLOBAL
+            number:
+              type: NUMBER
+              value: 1.0
+        condition_block_1:
+          category: PLAYER_CONDITION
+          type: IF_VARIABLE_GREATER_THAN
+          opposed: false
+          arguments:
+            variable:
+              type: VARIABLE
+              value:
+                name: round_time
+                type: GLOBAL
+            number:
+              type: NUMBER
+              value: 180.0
+          actions:
+            action_block_1:
+              category: LAUNCH_FUNCTION_ACTION
+              type: LAUNCH_FUNCTION
+              name: end_game
+              target: DEFAULT
+    exec_block_6:
+      category: EVENT_PLAYER
+      type: PLAYER_MOVE
+      actions:
+        condition_block_1:
+          category: PLAYER_CONDITION
+          type: IF_PLAYER_IN_REGION
+          opposed: false
+          arguments:
+            region:
+              type: TEXT
+              value: team2_hole
+          actions:
+            action_block_1:
+              category: VARIABLE_ACTION
+              type: VAR_SUM_ASSIGN_NUMBER
+              arguments:
+                variable:
+                  type: VARIABLE
+                  value:
+                    name: team1_score
+                    type: GLOBAL
+                number:
+                  type: NUMBER
+                  value: 1.0
+            action_block_2:
+              category: LAUNCH_FUNCTION_ACTION
+              type: LAUNCH_FUNCTION
+              name: round_end
+              target: DEFAULT
+        condition_block_2:
+          category: PLAYER_CONDITION
+          type: IF_PLAYER_IN_REGION
+          opposed: false
+          arguments:
+            region:
+              type: TEXT
+              value: team1_hole
+          actions:
+            action_block_1:
+              category: VARIABLE_ACTION
+              type: VAR_SUM_ASSIGN_NUMBER
+              arguments:
+                variable:
+                  type: VARIABLE
+                  value:
+                    name: team2_score
+                    type: GLOBAL
+                number:
+                  type: NUMBER
+                  value: 1.0
+            action_block_2:
+              category: LAUNCH_FUNCTION_ACTION
+              type: LAUNCH_FUNCTION
+              name: round_end
+              target: DEFAULT
+    exec_block_7:
+      category: FUNCTION
+      type: FUNCTION
+      name: round_end
+      actions:
+        action_block_1:
+          category: WORLD_ACTION
+          type: WORLD_CLEAR_PLAYER_BLOCKS
+          arguments: {}
+        action_block_2:
+          category: SELECTION_ACTION
+          type: SELECTION_SET
+          target: ALL_PLAYERS
+          arguments: {}
+        action_block_3:
+          category: PLAYER_ACTION
+          type: PLAYER_TELEPORT
+          target: SELECTED
+          arguments:
+            location:
+              type: LOCATION
+              value:
+                x: 0
+                y: 64
+                z: 0
+                yaw: 0
+                pitch: 0
+        action_block_4:
+          category: VARIABLE_ACTION
+          type: VAR_SUM_ASSIGN_NUMBER
+          arguments:
+            variable:
+              type: VARIABLE
+              value:
+                name: round_number
+                type: GLOBAL
+            number:
+              type: NUMBER
+              value: 1.0
+        condition_block_1:
+          category: PLAYER_CONDITION
+          type: IF_VARIABLE_EQUALS
+          opposed: false
+          arguments:
+            variable:
+              type: VARIABLE
+              value:
+                name: round_number
+                type: GLOBAL
+            number:
+              type: NUMBER
+              value: 5.0
+          actions:
+            action_block_1:
+              category: LAUNCH_FUNCTION_ACTION
+              type: LAUNCH_FUNCTION
+              name: end_game
+              target: DEFAULT
+          else:
+            action_block_2:
+              category: LAUNCH_FUNCTION_ACTION
+              type: LAUNCH_FUNCTION
+              name: start_round
+              target: DEFAULT
+    exec_block_8:
+      category: FUNCTION
+      type: FUNCTION
+      name: end_game
+      actions:
+        action_block_1:
+          category: SELECTION_ACTION
+          type: SELECTION_SET
+          target: ALL_PLAYERS
+          arguments: {}
+        action_block_2:
+          category: PLAYER_ACTION
+          type: PLAYER_SEND_MESSAGE
+          target: SELECTED
+          arguments:
+            messages:
+              type: LIST
+              value:
+                '1':
+                  type: TEXT
+                  value: "§6Игра окончена! §aКоманда 1: "
+                '2':
+                  type: VARIABLE
+                  value:
+                    name: team1_score
+                    type: GLOBAL
+                '3':
+                  type: TEXT
+                  value: " §cКоманда 2: "
+                '4':
+                  type: VARIABLE
+                  value:
+                    name: team2_score
+                    type: GLOBAL
+              type:
+                type: TEXT
+                value: join
+        action_block_3:
+          category: VARIABLE_ACTION
+          type: VAR_SET_NUMBER
+          arguments:
+            variable:
+              type: VARIABLE
+              value:
+                name: lobby_players
+                type: GLOBAL
+            number:
+              type: NUMBER
+              value: 0.0
+        action_block_4:
+          category: CONTROL_ACTION
+          type: CONTROL_STOP_ALL_CYCLES
+          arguments: {}
