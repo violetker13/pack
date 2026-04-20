@@ -1,0 +1,240 @@
+code:
+  blocks:
+    exec_block_1:
+      category: EVENT_PLAYER
+      type: PLAYER_JOIN
+      actions:
+        action_block1:
+          category: VARIABLE_ACTION
+          type: VAR_SUM_ASSIGN_NUMBER
+          arguments:
+            variable:
+              type: VARIABLE
+              value:
+                name: queue
+                type: GLOBAL
+            number:
+              type: NUMBER
+              value: 1
+        action_block2:
+          category: PLAYER_ACTION
+          type: PLAYER_SEND_MESSAGE
+          arguments:
+            messages:
+              type: LIST
+              value:
+                '1':
+                  type: TEXT
+                  value: §aТы в очереди
+            type:
+              type: TEXT
+              value: new-line
+        action_block3:
+          category: CONTROL_ACTION
+          type: CONTROL_IF
+          arguments:
+            condition:
+              type: TEXT
+              value: "%queue% % 2 == 0"
+          actions:
+            action_block4:
+              category: VARIABLE_ACTION
+              type: VAR_SET_NUMBER
+              arguments:
+                variable:
+                  type: VARIABLE
+                  value:
+                    name: timer
+                    type: GLOBAL
+                number:
+                  type: NUMBER
+                  value: 15
+            action_block5:
+              category: SELECTION_ACTION
+              type: LAUNCH_FUNCTION
+              name: start_timer
+
+    exec_block_2:
+      category: FUNCTION
+      type: FUNCTION
+      name: start_timer
+      actions:
+        action_block1:
+          category: CONTROL_ACTION
+          type: CONTROL_REPEAT
+          arguments:
+            times:
+              type: NUMBER
+              value: 15
+          actions:
+            action_block2:
+              category: PLAYER_ACTION
+              type: PLAYER_SEND_MESSAGE
+              target: ALL_PLAYERS
+              arguments:
+                messages:
+                  type: LIST
+                  value:
+                    '1':
+                      type: TEXT
+                      value: §eНачало через %timer%
+                type:
+                  type: TEXT
+                  value: new-line
+            action_block3:
+              category: VARIABLE_ACTION
+              type: VAR_MINUS_ASSIGN_NUMBER
+              arguments:
+                variable:
+                  type: VARIABLE
+                  value:
+                    name: timer
+                    type: GLOBAL
+                number:
+                  type: NUMBER
+                  value: 1
+        action_block4:
+          category: SELECTION_ACTION
+          type: LAUNCH_FUNCTION
+          name: start_game
+
+    exec_block_3:
+      category: FUNCTION
+      type: FUNCTION
+      name: start_game
+      actions:
+        action_block1:
+          category: VARIABLE_ACTION
+          type: VAR_SET_NUMBER
+          arguments:
+            variable:
+              type: VARIABLE
+              value:
+                name: round
+                type: GLOBAL
+            number:
+              type: NUMBER
+              value: 1
+        action_block2:
+          category: SELECTION_ACTION
+          type: LAUNCH_FUNCTION
+          name: give_items
+        action_block3:
+          category: SELECTION_ACTION
+          type: LAUNCH_FUNCTION
+          name: game_loop
+
+    exec_block_4:
+      category: FUNCTION
+      type: FUNCTION
+      name: give_items
+      actions:
+        action_block1:
+          category: PLAYER_ACTION
+          type: PLAYER_GIVE_ITEM
+          target: ALL_PLAYERS
+          arguments:
+            item:
+              type: ITEM
+              value:
+                v: 3953
+                type: STICK
+                meta:
+                  ==: ItemMeta
+                  meta-type: UNSPECIFIC
+                  enchants:
+                    minecraft:knockback: 2
+        action_block2:
+          category: PLAYER_ACTION
+          type: PLAYER_GIVE_ITEM
+          target: ALL_PLAYERS
+          arguments:
+            item:
+              type: ITEM
+              value:
+                v: 3953
+                type: WHITE_WOOL
+                amount: 64
+
+    exec_block_5:
+      category: FUNCTION
+      type: FUNCTION
+      name: game_loop
+      actions:
+        action_block1:
+          category: CONTROL_ACTION
+          type: CONTROL_REPEAT
+          arguments:
+            times:
+              type: NUMBER
+              value: 5
+          actions:
+            action_block2:
+              category: PLAYER_ACTION
+              type: PLAYER_SEND_MESSAGE
+              target: ALL_PLAYERS
+              arguments:
+                messages:
+                  type: LIST
+                  value:
+                    '1':
+                      type: TEXT
+                      value: §bРаунд %round%
+                type:
+                  type: TEXT
+                  value: new-line
+            action_block3:
+              category: CONTROL_ACTION
+              type: CONTROL_WAIT
+              arguments:
+                time:
+                  type: NUMBER
+                  value: 180
+            action_block4:
+              category: VARIABLE_ACTION
+              type: VAR_SUM_ASSIGN_NUMBER
+              arguments:
+                variable:
+                  type: VARIABLE
+                  value:
+                    name: round
+                    type: GLOBAL
+                number:
+                  type: NUMBER
+                  value: 1
+        action_block5:
+          category: SELECTION_ACTION
+          type: LAUNCH_FUNCTION
+          name: end_game
+
+    exec_block_6:
+      category: FUNCTION
+      type: FUNCTION
+      name: end_game
+      actions:
+        action_block1:
+          category: PLAYER_ACTION
+          type: PLAYER_SEND_MESSAGE
+          target: ALL_PLAYERS
+          arguments:
+            messages:
+              type: LIST
+              value:
+                '1':
+                  type: TEXT
+                  value: §cИгра окончена
+            type:
+              type: TEXT
+              value: new-line
+        action_block2:
+          category: VARIABLE_ACTION
+          type: VAR_SET_NUMBER
+          arguments:
+            variable:
+              type: VARIABLE
+              value:
+                name: queue
+                type: GLOBAL
+            number:
+              type: NUMBER
+              value: 0
